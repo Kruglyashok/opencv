@@ -21,13 +21,14 @@ int areaInd(vector<vector<pair<int, int>>> vec, int x, int y) {
 void merge(int x1, int y1, int x2, int y2, vector<vector<pair<int, int>>> &vec) {
 	int areaNum1, areaNum2;
 	areaNum1 = areaInd(vec, x1, y1);
+	cout << "areaNum1  = " << areaNum1 << endl;
 	areaNum2 = areaInd(vec, x2, y2);
+	cout << "areaNum2  = " << areaNum2 << endl;;
 	for (int i = vec[areaNum2].size() - 1; i >-1 ; i-- ) {
 		vec[areaNum1].push_back(vec[areaNum2][i]);
 		vec[areaNum2].pop_back();
 	}
 }
-
 //merge all of the right neighbours
 void mergeRight(Mat &source, int x, int y, int T, vector<vector<pair<int, int>>> &vec) {
 	if (abs(source.at<uchar>(x, y) - source.at<uchar>(x + 1, y)) < T) {
@@ -41,6 +42,10 @@ void mergeBot(Mat &source, int x, int y, int T, vector<vector<pair<int, int>>> &
 		merge(x, y, x, y + 1, vec);
 		if (y < source.rows - 2) mergeBot(source, x, y + 1, T, vec);
 	}
+}
+void changecolor(int &color) {
+	if (color == 0) color = 255;
+	else color = 0;
 }
 void mergeArea(Mat &source, Mat &merged) {
 	vector<vector<pair<int, int>>> vec(source.cols*source.rows); // vector of areas, [] - num of area, contains pixels corresponding to the area
@@ -57,7 +62,8 @@ void mergeArea(Mat &source, Mat &merged) {
 			Tavg += source.at<uchar>(i, j);
 		}
 	}
-	Tavg /= (source.cols*source.rows);
+	//Tavg /= (source.cols*source.rows);
+	Tavg = 10;
 	cout << "Tavg = " << Tavg << endl;
 	//merging 
 	for (int i = 0; i < source.rows; i++) {
@@ -70,17 +76,40 @@ void mergeArea(Mat &source, Mat &merged) {
 			mergeBot(source, i, j, Tavg, vec);
 		}
 	}
+	int counter = 0;
+	for (int i = 0; i < source.cols; i++) {
+		for (int j = 0; j < source.rows; j++) {
+			if (vec[i + j*source.cols].size() != 0) {
+				counter++;
+			}
+		}
+	}
+	int color = 0;
+	cout << "counter = " << counter << endl;
+	for (int i = 0; i < source.cols; i++) {
+		for (int j = 0; j < source.rows; j++) {
+			if (vec[i + j*source.cols].size() != 0) {
+				for (int g = 0; g < vec[i + j*source.cols].size(); g++) {
+					merged.at<uchar>(vec[i + j*source.cols][g].first, vec[i + j*source.cols][g].second) = color;
+				}
+				changecolor(color);
+			}
+		}
+	}
 }
 
 int main(int argc, char *argv[])
 {
 	Mat source, merged;
-	source = imread("test.png", CV_LOAD_IMAGE_GRAYSCALE);
+	source = imread("test128.png", CV_LOAD_IMAGE_GRAYSCALE);
 	namedWindow("important", CV_WINDOW_NORMAL);
+	source.copyTo(merged);
+
 	imshow("source", source);
 	mergeArea(source, merged);
 	waitKey(0);
-	imshow("source", source);
+	imshow("source", merged);
+	imwrite("result.png", merged);
 	waitKey(0);
 	return 0;
 
