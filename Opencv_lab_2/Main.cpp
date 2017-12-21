@@ -19,9 +19,13 @@ int areaInd(vector<vector<pair<int, int>>> vec, int x, int y) {
 }
 //to fill, merges 2 areas, we must put pixel in correspondin elem of vec
 void merge(int x1, int y1, int x2, int y2, vector<vector<pair<int, int>>> &vec) {
-	int areaNum;
-	areaNum = areaInd(vec, x1, y1);
-
+	int areaNum1, areaNum2;
+	areaNum1 = areaInd(vec, x1, y1);
+	areaNum2 = areaInd(vec, x2, y2);
+	for (int i = vec[areaNum2].size() - 1; i >-1 ; i-- ) {
+		vec[areaNum1].push_back(vec[areaNum2][i]);
+		vec[areaNum2].pop_back();
+	}
 }
 
 //merge all of the right neighbours
@@ -45,12 +49,6 @@ void mergeArea(Mat &source, Mat &merged) {
 		for (int j = 0; j < source.rows; j++) {
 			vec[i + j*source.cols].push_back(make_pair(i, j));
 		}
-	}
-	for (int i = 0; i < 10; i++) {
-		cout << "(" << vec[i][0].first << "," << vec[i][0].second << ")" << endl;
-	}
-	for (int i = 65526; i < 65536; i++) {
-		cout << "(" << vec[i][0].first << "," << vec[i][0].second << ")" << endl;
 	}
 
 	int Tavg = 0; // average intense

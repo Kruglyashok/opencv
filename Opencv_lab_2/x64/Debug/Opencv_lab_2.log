@@ -1,3 +1,4 @@
 ﻿  Main.cpp
+e:\vsprojects\opencv_lab_2\opencv_lab_2\main.cpp(25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Opencv_lab_2.vcxproj -> E:\VSProjects\Opencv_lab_2\x64\Debug\Opencv_lab_2.exe
   Opencv_lab_2.vcxproj -> E:\VSProjects\Opencv_lab_2\x64\Debug\Opencv_lab_2.pdb (Full PDB)
