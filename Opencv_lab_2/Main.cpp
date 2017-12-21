@@ -21,9 +21,7 @@ int areaInd(vector<vector<pair<int, int>>> vec, int x, int y) {
 void merge(int x1, int y1, int x2, int y2, vector<vector<pair<int, int>>> &vec) {
 	int areaNum1, areaNum2;
 	areaNum1 = areaInd(vec, x1, y1);
-	cout << "areaNum1  = " << areaNum1 << endl;
 	areaNum2 = areaInd(vec, x2, y2);
-	cout << "areaNum2  = " << areaNum2 << endl;;
 	for (int i = vec[areaNum2].size() - 1; i >-1 ; i-- ) {
 		vec[areaNum1].push_back(vec[areaNum2][i]);
 		vec[areaNum2].pop_back();
@@ -63,7 +61,7 @@ void mergeArea(Mat &source, Mat &merged) {
 		}
 	}
 	//Tavg /= (source.cols*source.rows);
-	Tavg = 10;
+	Tavg = 20;
 	cout << "Tavg = " << Tavg << endl;
 	//merging 
 	for (int i = 0; i < source.rows; i++) {
@@ -76,16 +74,8 @@ void mergeArea(Mat &source, Mat &merged) {
 			mergeBot(source, i, j, Tavg, vec);
 		}
 	}
-	int counter = 0;
-	for (int i = 0; i < source.cols; i++) {
-		for (int j = 0; j < source.rows; j++) {
-			if (vec[i + j*source.cols].size() != 0) {
-				counter++;
-			}
-		}
-	}
+
 	int color = 0;
-	cout << "counter = " << counter << endl;
 	for (int i = 0; i < source.cols; i++) {
 		for (int j = 0; j < source.rows; j++) {
 			if (vec[i + j*source.cols].size() != 0) {
@@ -109,7 +99,7 @@ int main(int argc, char *argv[])
 	mergeArea(source, merged);
 	waitKey(0);
 	imshow("source", merged);
-	imwrite("result.png", merged);
+	imwrite("result20.png", merged);
 	waitKey(0);
 	return 0;
 
